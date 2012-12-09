@@ -1,7 +1,7 @@
 <?php
 // Alot of this code is massaged from Andrew Nacin's log-deprecated-notices plugin
 
-class Debug_Bar_Deprecated extends Debug_Bar_Panel {
+class Debug_Console_Deprecated extends Debug_Console_Panel {
 	var $deprecated_functions = array();
 	var $deprecated_files = array();
 	var $deprecated_arguments = array();

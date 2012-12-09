@@ -1,6 +1,6 @@
 <?php
 
-class Debug_Bar_PHP extends Debug_Bar_Panel {
+class Debug_Console_PHP extends Debug_Console_Panel {
 	var $warnings = array();
 	var $notices = array();
 	var $real_error_handler = array();
@@ -18,7 +18,7 @@ class Debug_Bar_PHP extends Debug_Bar_Panel {
 		return count( $this->notices ) || count( $this->warnings );
 	}
 
-	function debug_bar_classes( $classes ) {
+	function Debug_Console_classes( $classes ) {
 		if ( count( $this->warnings ) )
 			$classes[] = 'debug-bar-php-warning-summary';
 		elseif ( count( $this->notices ) )

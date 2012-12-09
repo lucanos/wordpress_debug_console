@@ -418,7 +418,7 @@ body.debug-bar-maximized.debug-bar-visible {
  *   JS Error item styling
  * ========================================================================= */
 
-#debug-menu-links li a#debug-menu-link-Debug_Bar_JS {
+#debug-menu-links li a#debug-menu-link-Debug_Console_JS {
 	display: none;
 }
 

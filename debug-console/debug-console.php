@@ -17,10 +17,10 @@
  * They are not used when a regular user is logged in.
  */
 
-class Debug_Bar {
+class Debug_Console {
 	var $panels = array();
 
-	function Debug_Bar() {
+	function Debug_Console() {
 		if ( defined('DOING_AJAX') && DOING_AJAX )
 			add_action( 'admin_init', array( &$this, 'init_ajax' ) );
 		add_action( 'admin_bar_init', array( &$this, 'init' ) );
@@ -69,24 +69,24 @@ class Debug_Bar {
 
 		wp_enqueue_script( 'debug-bar', plugins_url( "js/debug-bar$suffix.js", __FILE__ ), array( 'jquery' ), '20111209', true );
 
-		do_action('debug_bar_enqueue_scripts');
+		do_action('Debug_Console_enqueue_scripts');
 	}
 
 	function init_panels() {
 		$classes = array(
-			'Debug_Bar_PHP',
-			'Debug_Bar_Queries',
-			'Debug_Bar_WP_Query',
-			'Debug_Bar_Deprecated',
-			'Debug_Bar_Request',
-			'Debug_Bar_Object_Cache',
+			'Debug_Console_PHP',
+			'Debug_Console_Queries',
+			'Debug_Console_WP_Query',
+			'Debug_Console_Deprecated',
+			'Debug_Console_Request',
+			'Debug_Console_Object_Cache',
 		);
 
 		foreach ( $classes as $class ) {
 			$this->panels[] = new $class;
 		}
 
-		$this->panels = apply_filters( 'debug_bar_panels', $this->panels );
+		$this->panels = apply_filters( 'Debug_Console_panels', $this->panels );
 	}
 
 	function ensure_ajaxurl() { ?>
@@ -111,14 +111,14 @@ class Debug_Bar {
 	function admin_bar_menu() {
 		global $wp_admin_bar;
 
-		$classes = apply_filters( 'debug_bar_classes', array() );
+		$classes = apply_filters( 'Debug_Console_classes', array() );
 		$classes = implode( " ", $classes );
 
 		/* Add the main siteadmin menu item */
 		$wp_admin_bar->add_menu( array(
 			'id'     => 'debug-bar',
 			'parent' => 'top-secondary',
-			'title'  => apply_filters( 'debug_bar_title', __('Debug', 'debug-bar') ),
+			'title'  => apply_filters( 'Debug_Console_title', __('Debug', 'debug-bar') ),
 			'meta'   => array( 'class' => $classes ),
 		) );
 
@@ -187,7 +187,7 @@ class Debug_Bar {
 			if ( ! WP_DEBUG )
 				$statuses[] = array( 'warning', __('Please Enable', 'debug-bar'), 'WP_DEBUG' );
 
-			$statuses = apply_filters( 'debug_bar_statuses', $statuses );
+			$statuses = apply_filters( 'Debug_Console_statuses', $statuses );
 
 			foreach ( $statuses as $status ):
 				list( $slug, $title, $data ) = $status;
@@ -242,10 +242,10 @@ class Debug_Bar {
 	?>
 	</div>
 
-	<?php do_action( 'debug_bar' ); ?>
+	<?php do_action( 'Debug_Console' ); ?>
 	</div>
 	<?php
 	}
 }
 
-$GLOBALS['debug_bar'] = new Debug_Bar();
+$GLOBALS['Debug_Console'] = new Debug_Console();

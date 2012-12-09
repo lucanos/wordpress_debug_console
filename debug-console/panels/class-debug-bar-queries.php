@@ -1,6 +1,6 @@
 <?php
 
-class Debug_Bar_Queries extends Debug_Bar_Panel {
+class Debug_Console_Queries extends Debug_Console_Panel {
 	function init() {
 		$this->title( __('Queries', 'debug-bar') );
 	}
@@ -9,7 +9,7 @@ class Debug_Bar_Queries extends Debug_Bar_Panel {
 		$this->set_visible( defined('SAVEQUERIES') && SAVEQUERIES || ! empty($GLOBALS['EZSQL_ERROR']) );
 	}
 
-	function debug_bar_classes( $classes ) {
+	function Debug_Console_classes( $classes ) {
 		if ( ! empty($GLOBALS['EZSQL_ERROR']) )
 			$classes[] = 'debug-bar-php-warning-summary';
 		return $classes;

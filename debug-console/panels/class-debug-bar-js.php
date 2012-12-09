@@ -1,6 +1,6 @@
 <?php
 
-class Debug_Bar_JS extends Debug_Bar_Panel {
+class Debug_Console_JS extends Debug_Console_Panel {
 	var $real_error_handler = array();
 
 	function init() {
@@ -9,7 +9,7 @@ class Debug_Bar_JS extends Debug_Bar_Panel {
 
 		$this->title( __('JavaScript', 'debug-bar') );
 
-		// attach here instead of debug_bar_enqueue_scripts
+		// attach here instead of Debug_Console_enqueue_scripts
 		// because we want to be as early as possible!
 		$wcsf2011 = '20110813';
 		wp_enqueue_script( 'debug-bar-js', plugins_url( "js/debug-bar-js.dev.js", dirname(__FILE__) ), array(), $wcsf2011 );

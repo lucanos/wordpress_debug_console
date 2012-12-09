@@ -1,10 +1,10 @@
 <?php
 
-class Debug_Bar_Panel {
+class Debug_Console_Panel {
 	var $_title = '';
 	var $_visible = true;
 
-	function Debug_Bar_Panel( $title='' ) {
+	function Debug_Console_Panel( $title='' ) {
 		$this->title( $title );
 
 		if ( $this->init() === false ) {
@@ -12,7 +12,7 @@ class Debug_Bar_Panel {
 			return;
 		}
 
-		add_filter( 'debug_bar_classes', array( &$this, 'debug_bar_classes' ) );
+		add_filter( 'Debug_Console_classes', array( &$this, 'Debug_Console_classes' ) );
 	}
 
 	/**
@@ -41,7 +41,7 @@ class Debug_Bar_Panel {
 		$this->_title = $title;
 	}
 
-	function debug_bar_classes( $classes ) {
+	function Debug_Console_classes( $classes ) {
 		return $classes;
 	}
 }

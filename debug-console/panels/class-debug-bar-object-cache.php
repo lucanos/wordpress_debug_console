@@ -1,6 +1,6 @@
 <?php
 
-class Debug_Bar_Object_Cache extends Debug_Bar_Panel {
+class Debug_Console_Object_Cache extends Debug_Console_Panel {
 	function init() {
 		$this->title( __('Object Cache', 'debug-bar') );
 	}

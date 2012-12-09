@@ -22,7 +22,7 @@
 			if ( button.className.indexOf( 'debug-bar-php-warning-summary' ) === -1 )
 				button.className = button.className + ' debug-bar-php-warning-summary';
 
-			tab = document.getElementById('debug-menu-link-Debug_Bar_JS');
+			tab = document.getElementById('debug-menu-link-Debug_Console_JS');
 			if ( tab )
 				tab.style.display = 'block';
 		}

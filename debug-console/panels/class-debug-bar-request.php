@@ -1,6 +1,6 @@
 <?php
 
-class Debug_Bar_Request extends Debug_Bar_Panel {
+class Debug_Console_Request extends Debug_Console_Panel {
 	function init() {
 		$this->title( __('Request', 'debug-bar') );
 	}
