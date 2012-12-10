@@ -26,30 +26,44 @@ class Debug_Console_Deprecated extends Debug_Console_Panel {
 		);
 	}
 
-	function render() {
-		echo "<div id='debug-bar-deprecated'>";
-		echo '<h2><span>Total Functions:</span>' . number_format( count( $this->deprecated_functions ) ) . "</h2>\n";
-		echo '<h2><span>Total Arguments:</span>' . number_format( count( $this->deprecated_arguments ) ) . "</h2>\n";
-		echo '<h2><span>Total Files:</span>' . number_format( count( $this->deprecated_files ) ) . "</h2>\n";
-		if ( count( $this->deprecated_functions ) ) {
-			echo '<ol class="debug-bar-deprecated-list">';
-			foreach ( $this->deprecated_functions as $location => $message)
-				echo "<li class='debug-bar-deprecated-function'>".str_replace(ABSPATH, '', $location) . ' - ' . strip_tags($message). "</li>";
-			echo '</ol>';
-		}
-		if ( count( $this->deprecated_files ) ) {
-			echo '<ol class="debug-bar-deprecated-list">';
-			foreach ( $this->deprecated_files as $location => $message)
-				echo "<li class='debug-bar-deprecated-function'>".str_replace(ABSPATH, '', $location) . ' - ' . strip_tags($message). "</li>";
-			echo '</ol>';
-		}
-		if ( count( $this->deprecated_arguments ) ) {
-			echo '<ol class="debug-bar-deprecated-list">';
-			foreach ( $this->deprecated_arguments as $location => $message)
-				echo "<li class='debug-bar-deprecated-function'>".str_replace(ABSPATH, '', $location) . ' - ' . strip_tags($message). "</li>";
-			echo '</ol>';
-		}
-		echo "</div>";
+	function render(){
+?>
+  console.group( '<?php echo __('Deprecated', 'debug-bar'); ?>' );
+    console.<?php echo ( count( $this->deprecated_functions ) ? 'warn' : 'info' ); ?>( '<?php echo number_format( count( $this->deprecated_functions ) ); ?> Deprecated Functions' );
+<?php
+    if( count( $this->deprecated_functions ) ){
+      $o = array();
+      foreach( $this->deprecated_functions As $k => $v );
+        $o[] = array( str_replace( ABSPATH , '' , $k ) , strip_tags( $v ) );
+?>
+    console.table( <?php echo json_encode( $o ); ?> , [{property:"0",label:"Location"},{property:"1",label:"Message"}] );
+<?php
+    }
+?>
+    console.<?php echo ( count( $this->deprecated_arguments ) ? 'warn' : 'info' ); ?>( '<?php echo number_format( count( $this->deprecated_arguments ) ); ?> Deprecated Arguments' );
+<?php
+    if( count( $this->deprecated_arguments ) ){
+      $o = array();
+      foreach( $this->deprecated_arguments As $k => $v );
+        $o[] = array( str_replace( ABSPATH , '' , $k ) , strip_tags( $v ) );
+?>
+    console.table( <?php echo json_encode( $o ); ?> , [{property:"0",label:"Location"},{property:"1",label:"Message"}] );
+<?php
+    }
+?>
+    console.<?php echo ( count( $this->deprecated_files ) ? 'warn' : 'info' ); ?>( '<?php echo number_format( count( $this->deprecated_files ) ); ?> Deprecated Files' );
+<?php
+    if( count( $this->deprecated_files ) ){
+      $o = array();
+      foreach( $this->deprecated_files As $k => $v );
+        $o[] = array( str_replace( ABSPATH , '' , $k ) , strip_tags( $v ) );
+?>
+    console.table( <?php echo json_encode( $o ); ?> , [{property:"0",label:"Location"},{property:"1",label:"Message"}] );
+<?php
+    }
+?>
+  console.groupEnd();
+<?php
 	}
 
 	function deprecated_function_run($function, $replacement, $version) {

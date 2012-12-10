@@ -12,13 +12,11 @@ class Debug_Console_WP_Query extends Debug_Console_Panel {
 	function render() {
 		global $template, $wp_query;
 		$queried_object = get_queried_object();
-		if ( $queried_object && isset( $queried_object->post_type ) )
+    $post_type_object = false;
+		if( $queried_object && isset( $queried_object->post_type ) )
 			$post_type_object = get_post_type_object( $queried_object->post_type );
 
-		echo "<div id='debug-bar-wp-query'>";
-		echo '<h2><span>Queried Object ID:</span>' . get_queried_object_id() . "</h2>\n";
-
-		// Determine the query type. Follows the template loader order.
+    // Determine the query type. Follows the template loader order.
 		$type = '';
 		if ( is_404() )
 			$type = '404';
@@ -48,58 +46,48 @@ class Debug_Console_WP_Query extends Debug_Console_Panel {
 			$type = 'Archive';
 		elseif ( is_paged() )
 			$type = 'Paged';
-
-		if ( !empty($type) )
-			echo '<h2><span>Query Type:</span>' . $type . "</h2>\n";
-
-		if ( !empty($template) )
-			echo '<h2><span>Query Template:</span>' . basename($template) . "</h2>\n";
-
-		$show_on_front = get_option( 'show_on_front' );
-		$page_on_front = get_option( 'page_on_front' );
-		$page_for_posts = get_option( 'page_for_posts' );
-
-		echo '<h2><span>Show on Front:</span>' . $show_on_front . "</h2>\n";
-		if ( 'page' == $show_on_front ) {
-			echo '<h2><span>Page for Posts:</span>' . $page_for_posts . "</h2>\n";
-			echo '<h2><span>Page on Front:</span>' . $page_on_front . "</h2>\n";
-		}
-
-		if ( isset( $post_type_object ) )
-			echo '<h2><span>Post Type:</span>' . $post_type_object->labels->singular_name . "</h2>\n";
-
-		echo '<div class="clear"></div>';
-
-		if ( empty($wp_query->query) )
-			$query = 'None';
-		else
-			$query = http_build_query( $wp_query->query );
-
-		echo '<h3>Query Arguments:</h3>';
-		echo '<p>' . esc_html( $query ) . '</p>';
-
-		if ( ! empty($wp_query->request) ) {
-			echo '<h3>Query SQL:</h3>';
-			echo '<p>' . esc_html( $wp_query->request ) . '</p>';
-		}
-
-		if ( ! is_null( $queried_object ) ) {
-			echo '<h3>Queried Object:</h3>';
-			echo '<ol class="debug-bar-wp-query-list">';
-			foreach ($queried_object as $key => $value) {
-				// See: http://wordpress.org/support/topic/plugin-debug-bar-custom-post-type-archive-catchable-fatal-error
-				// TODO: Fix better
-				if ( is_object( $value ) ) {
-					echo '<li>' . $key . ' => <ol>';
-					foreach ( $value as $_key => $_value )
-						echo '<li>' . $_key . ' => ' . $_value . '</li>';
-					echo '</ol></li>';
-				} else {
-					echo '<li>' . $key . ' => ' . $value . '</li>';
+?>
+  console.group( '<?php echo __('WP Query', 'debug-bar'); ?>' );
+    console.info( 'Object ID: <?php echo get_queried_object_id(); ?>' );
+    console.info( 'Query Type: <?php echo $type; ?>' );
+    console.info( 'Query Template: <?php echo basename( $template ); ?>' );
+    console.info( 'Show on Front: <?php echo ( $p = get_option( 'show_on_front' ) ); ?>' );
+<?php
+    if( $p=='page' ){
+?>
+    console.info( 'Page for Posts: <?php echo get_option( 'page_for_posts' ); ?>' );
+    console.info( 'Page on Front: <?php echo get_option( 'page_on_front' ); ?>' );
+<?php
+    }
+    if( $post_type_object ){
+?>
+    console.info( 'Post Type: <?php echo $post_type_object->labels->singular_name ; ?>' );
+<?php
+    }
+?>
+    console.info( 'Query Arguments: <?php echo ( empty( $wp_query->query ) ? 'None' : http_build_query( $wp_query->query ) ); ?>' );
+<?php
+    if( !empty( $wp_query->request ) ){
+?>
+    console.info( 'Query SQL: <?php echo addslashes( $wp_query->request ); ?>' );
+<?php
+    }
+    if( !is_null( $queried_object ) ){
+      $o = array();
+      foreach( $queried_object as $k => $v ){
+				if( is_object( $v ) ){
+          $o[] = array( $k , serialize( $v ) );
+				}else{
+					$o[] = array( $k , $v );
 				}
-			}
-			echo '</ol>';
+      }
+?>
+    console.info( '<?php echo number_format( count( $queried_object ) ); ?> Queried Objects' );
+    console.table( <?php echo json_encode( $o ); ?> , [{property:"0",label:"Key"},{property:"1",label:"Value"}] );
+<?php
 		}
-		echo '</div>';
+?>
+  console.groupEnd();
+<?php
 	}
 }
